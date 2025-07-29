@@ -6,9 +6,9 @@ import os
 from ..common.quaternion import *
 from ..utils.paramUtil import *
 
+import numpy
 import torch
 from tqdm import tqdm
-
 
 l_idx1, l_idx2 = 5, 8
 fid_r, fid_l = [8, 11], [7, 10]
@@ -18,7 +18,7 @@ face_joint_indx = [2, 1, 17, 16]
 # 2*3*5=30, left first, then right
 hand_joints_id = [i for i in range(25, 55)]
 body_joints_id = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
-                    12, 13, 14, 15, 16, 17, 18, 19, 20, 21]  # 22 joints
+                  12, 13, 14, 15, 16, 17, 18, 19, 20, 21]  # 22 joints
 # l_hip, r_hip
 r_hip, l_hip = 2, 1
 # from .humanml.utils.paramUtil import t2m_all_raw_offsets, t2m_body_hand_kinematic_chain
@@ -261,6 +261,7 @@ def process_file(positions, feet_thre, tgt_offsets, kinematic_chain, src_skel):
         #     feet_r = (((feet_r_x + feet_r_y + feet_r_z) < velfactor) & (feet_r_h < heightfactor)).astype(np.float64)
         feet_r = (((feet_r_x + feet_r_y + feet_r_z) < velfactor)).astype(np.float64)
         return feet_l, feet_r
+
     #
     feet_l, feet_r = foot_detect(positions, feet_thre)
     # feet_l, feet_r = foot_detect(positions, 0.002)
@@ -415,6 +416,7 @@ def recover_from_rot(data, joints_num, skeleton):
 
     return positions
 
+
 def recover_rot(data):
     # dataset [bs, seqlen, 263/251] HumanML/KIT
     joints_num = 22 if data.shape[-1] == 263 else 21
@@ -446,6 +448,8 @@ def recover_from_ric(data, joints_num):
     positions = torch.cat([r_pos.unsqueeze(-2), positions], dim=-2)
 
     return positions
+
+
 '''
 For Text2Motion Dataset
 '''
