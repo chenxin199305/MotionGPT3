@@ -5,6 +5,8 @@ import torch
 import time
 # import cv2
 import os
+import json
+from omegaconf import OmegaConf
 import numpy as np
 import pytorch_lightning as pl
 import moviepy.editor as mp
@@ -24,9 +26,20 @@ os.environ['DISPLAY'] = ':0.0'
 
 # Load model
 cfg = parse_args(phase="webui")  # parse config file
+
+print(
+    f"cfg = \n"
+    f"{json.dumps(OmegaConf.to_container(cfg), indent=4, ensure_ascii=False)}"
+)
+
+# Write config to file
+with open("config.json", "w", encoding="utf-8") as f:
+    json.dump(OmegaConf.to_container(cfg), f, indent=4, ensure_ascii=False)
+
 cfg.FOLDER = 'cache'
 output_dir = Path(cfg.FOLDER)
 output_dir.mkdir(parents=True, exist_ok=True)
+
 pl.seed_everything(cfg.SEED_VALUE)
 if cfg.ACCELERATOR == "gpu":
     device = torch.device("cuda")
