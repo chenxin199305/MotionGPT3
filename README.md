@@ -58,7 +58,7 @@ conda activate mgpt
 Install the packages in `requirements.txt` and install [PyTorch 2.0](https://pytorch.org/)
 
 ```
-pip install -r requirements.txt
+pip install -r requirements.txt -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
 python -m spacy download en_core_web_sm
 ```
 
